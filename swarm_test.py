@@ -1,22 +1,31 @@
-
-from swarm import Swarm
+#from swarm_p import Swarm
+from swarm.swarm import Swarm
 
 if __name__=="__main__":
-    swr = Swarm()
-    def func(node):
-        idx = node.proc_num
-        print("i am process",idx)
-        if idx!=2:
-            print("###<<sending from %d  to 2"%idx)
-            s = node.send(2,"hello from %i"%idx)
-        else:
-            a = 0
-            while True:
-                print("listnng")
-                r = node.recv()
-                print("###>>Me, the %d got "%idx,r)
-                a+=1
-                print("###>>total got:",a)
 
-    [swr.spawn( func ) for i in range(6)]
+    def master_func(node):
+        print("i am process", node.name)
+        received_in_total = 0
+        for slave in ['slave%d' % i for i in range(1, 4)]:
+            print("listening")
+            r = node.recv()
+            print("###>>Me, the %s got " % node.name, r)
+            received_in_total += 1
+            print("###>>total got:", received_in_total)
+    
+    def slave_func(node):
+        print("i am process", node.name)
+        print("###<<sending from %s to master" % node.name)
+        s = node.send('master', "hello from %s" % node.name)
+
+
+    swr = Swarm(local_nodes=[
+        {
+            'names' : ['master'], 
+            'function' : master_func,
+        }, {
+            'names' : ['slave%d' % i for i in range(1, 4)], 
+            'function' : slave_func,
+        }
+    ])
     swr.start()
