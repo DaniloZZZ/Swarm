@@ -23,9 +23,9 @@ class Swarm():
         pcnt = len(s.processes)
 
         if not pcnt :
-            s.pipes[name] = {name : None}
+            s.pipes[name] = {}
         else : 
-            new_line = {name : None}
+            new_line = {}
 
             for line in s.pipes:
                 own_end, anothers_end = Pipe()

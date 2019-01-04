@@ -16,8 +16,7 @@ class Node:
         if addr:
             return s.pipes[addr].recv()
         else:
-            pipes = [s.pipes[item] for item in s.pipes if s.pipes[item]] 
-            for waiter in wait(pipes):
+            for waiter in wait(s.pipes):
                 msg = waiter.recv()
                 return msg
 
