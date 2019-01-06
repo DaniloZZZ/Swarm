@@ -23,7 +23,7 @@ class Node:
 
 def run_node(name, function, pipes):
     """
-    A function that wraps the user's function that to be
+    A function that wraps the user's function that is to be
     executed in this node.
     Parameters
     ---------

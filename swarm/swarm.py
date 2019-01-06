@@ -38,21 +38,6 @@ class Swarm():
         p = Process(target=run_node, args=(name, function, s.pipes[name]))
         s.processes.append(p)
 
-        """
-        pcnt = len(s.processes)
-
-        if pcnt > 0 :
-            s.pipes.append([])
-            for line in range(pcnt):
-                own_end, anothers_end = Pipe()
-                s.pipes[line].append(anothers_end)
-                s.pipes[pcnt].append(own_end)
-            s.pipes[pcnt].append(None)
-
-        p = Process(target=run_node, args=(pcnt, func, s.pipes[pcnt]))
-        s.processes.append(p)
-        """
-
     def start(s):
         for p in s.processes:
             p.start()
