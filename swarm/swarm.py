@@ -10,7 +10,7 @@ class Swarm():
 
         for nodes_list in local_nodes:
             for node_name in nodes_list['names']:
-                s.spawn(node_name, nodes_list['function'])        
+                s.spawn(node_name, nodes_list['function'])
 
 
     def spawn(s, name, function):
@@ -24,7 +24,7 @@ class Swarm():
 
         if not pcnt :
             s.pipes[name] = {}
-        else : 
+        else :
             new_line = {}
 
             for line in s.pipes:
@@ -32,7 +32,7 @@ class Swarm():
                 s.pipes[line][name] = anothers_end
                 new_line[line] = own_end
 
-            s.pipes[name] = new_line 
+            s.pipes[name] = new_line
 
 
         p = Process(target=run_node, args=(name, function, s.pipes[name]))
