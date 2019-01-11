@@ -22,15 +22,16 @@ class Node:
             s.port = port
 
         def start(s):
-            s._print("starting stub")
+            s._print("starting...")
+            s._start_threads()
 
         def _start_threads(s):
             ret = s.func(s)
-            s._print('user func returned'+str(ret))
+            s._print('user func returned',ret)
             return ret
 
-        def _print(s,string):
-            print("<<node %s"%s.name,string)
+        def _print(s,*args):
+            print("<<node %s"%s.name,*args)
 
         def _get_node_by_name(s,name):
             r = [n for n in s.network if n['name']==name]
