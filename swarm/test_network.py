@@ -1,4 +1,5 @@
 from swarm_net import SwarmNetwork
+import time
 
 config = [
 
@@ -11,18 +12,28 @@ config = [
         ]
 
 def _print(node,*arg):
-    print("###%s got"%node.name,*arg)
+    print("###%s"%node.name,*arg)
 
 def func(node):
     print("I am node",node.name,'with pid',node.pid)
     if node.name=='A':
         node.send('B','hello from a')
+        for i in range(10):
+            msg = node.recv()
+            _print(node,i,'got',msg)
+            time.sleep(0.1)
+            node.send('B',msg+', a')
+
     elif node.name=='B':
-        msg = node.recv()
-        _print(node,'got',msg)
+        for i in range(10):
+            msg = node.recv()
+            _print(node,i,'got',msg)
+            node.send('C',msg+',b')
     else:
-        print("i'm the C and waiting")
-        msg = node.recv()
+        for i in range(10):
+            msg = node.recv()
+            _print(node,i,'got',msg)
+            node.send('A',msg+',c')
 
 
 def main():

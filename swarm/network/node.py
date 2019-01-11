@@ -59,4 +59,7 @@ class Node:
             s._send_to_node(data, node)
 
         def recv(s):
-            return s.server_pipe.recv()
+            bytes = s.server_pipe.recv()
+            # now we send oly strings
+            # TODO: send pickle
+            return bytes.decode('utf-8')
