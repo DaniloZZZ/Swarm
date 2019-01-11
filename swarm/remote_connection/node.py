@@ -18,13 +18,13 @@ class PipedThreadedServer(Thread):
 
 
 	class RequestHandler(socketserver.BaseRequestHandler):
-		
+
 		def handle(self):
 			data = self.request.recv(1024).strip()
 			self.server.pipe.send(str(data))
 
 
-	def __init__(self, server_port, pipe, **kwargs): 
+	def __init__(self, server_port, pipe, **kwargs):
 		super(PipedThreadedServer, self).__init__()
 		self.server_port = server_port
 		self.pipe = pipe
@@ -33,10 +33,10 @@ class PipedThreadedServer(Thread):
 
 
 	def run(self):
-		with PipedThreadedServer.TCPServer(self.pipe, ("localhost", self.server_port), 
+		with PipedThreadedServer.TCPServer(self.pipe, ("localhost", self.server_port),
 			PipedThreadedServer.RequestHandler) as server:
 			server.serve_forever()
-		
+
 
 
 class Node:
@@ -48,7 +48,7 @@ class Node:
 		self.their_host = "localhost"
 		self.recv_pipe, send_pipe = Pipe(duplex=False)
 		self.server = PipedThreadedServer(self.my_port, send_pipe)
-	
+
 
 	def send(self, data):
 		with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
