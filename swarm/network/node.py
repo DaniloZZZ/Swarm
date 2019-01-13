@@ -33,8 +33,10 @@ class Node:
 
 			s._print("starting...")
 			s._start_threads()
+			# this is to simulate delayed start
+			if s.name=="B":
+				time.sleep(1)
 			s._handshake(s.network)
-			# this will be replaced by connection establishment
 			s._print("Connection with network established!")
 			s._print("##calling user fucntion")
 			ret = s.func(s)
@@ -43,8 +45,8 @@ class Node:
 
 		def _handshake(s, network):
 			"""
-			Sends a connect signal to the node, then wait for
-			response from the peer
+			Sends a connect signal to every node in network
+			then listens for response from every node in network
 			"""
 			data = bytes([0])+s.__int_to_bytes(len(s.name))
 			data += bytes(s.name,'utf-8')
