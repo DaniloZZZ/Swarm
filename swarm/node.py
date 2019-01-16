@@ -33,8 +33,9 @@ def run_node(name, function, pipes, verbose=False):
     pipe: a interface for communication
     """
 
+    if verbose: import os
     node = Node(name, pipes)
-    if verbose: print("Node %s started" % name)
+    if verbose: print("Node {} started, pid {}".format(name, os.getpid()))
     ret = function(node)
     if verbose: print("Node %s exited" % name)
     return ret

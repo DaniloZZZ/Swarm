@@ -18,7 +18,7 @@ if __name__=="__main__":
         s = node.send('master', "hello from %s" % node.name)
 
 
-    swr = Swarm(local_nodes=[
+    swr = Swarm(mode='strict', local_nodes=[
         {
             'names' : ['master'], 
             'function' : master_func,
