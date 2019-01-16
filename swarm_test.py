@@ -1,4 +1,3 @@
-#from swarm_p import Swarm
 from swarm.swarm import Swarm
 
 if __name__=="__main__":

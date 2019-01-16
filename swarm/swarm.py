@@ -1,5 +1,5 @@
 from multiprocessing import Pipe, Process
-from .node_v import run_node
+from .node import run_node
 
 
 class Swarm():
@@ -35,7 +35,7 @@ class Swarm():
             s.pipes[name] = new_line 
 
 
-        p = Process(target=run_node, args=(name, function, s.pipes[name]))
+        p = Process(target=run_node, args=(name, function, s.pipes[name], True))
         s.processes.append(p)
 
     def start(s):
