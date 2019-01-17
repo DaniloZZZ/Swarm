@@ -10,7 +10,7 @@ class Swarm():
 
         self.MODE_FUNCTIONS = {
             'terminate' : self.mode_terminate, 
-            # 'restart' : self.mode_restart TODO implement
+             'restart' : self.mode_restart 
         }
 
         self.pipes = {}
@@ -20,6 +20,7 @@ class Swarm():
             for node_name in nodes_list['names']:
                 self.spawn(node_name, nodes_list['function'])      
 
+        self.local_nodes = local_nodes
 
 
     def spawn(self, name, function):
@@ -73,9 +74,10 @@ class Swarm():
                     process.exitcode > 0]
                 for process in processes_exited_with_code:
                     if process.exitcode > 0:
-                        print(f"Process {process.name} esited (exit code {process.exitcode})")
+                        print(f"Process {process.name} exited (exit code {process.exitcode})") # TODO implement traceback printing
                         process.close() # TODO close and delete pipes as well
                         self.processes.remove(process)
+                        exited_processes.remove(process)
 
                 interrupted_processes = [process for process in exited_processes if 
                     process.exitcode < 0]
@@ -86,17 +88,13 @@ class Swarm():
 
 
     def mode_terminate(self, interrupted_processes):
-
-        names_of_exited_nodes = [process.name for process in interrupted_processes if 
-            not process.is_alive()]
-
-        print("\n\n")
-        for name in names_of_exited_nodes:
-            print(f"Node {name} exited")
+        print("\n")
+        for process in interrupted_processes:
+            print(f"Node {process.name} exited")
         print(f"Terminating all the other nodes")
 
         self.terminate_all_nodes()
-        print("\nAll the nodes are terminated\n\n")
+        print("\nAll the nodes are terminated\n")
 
         raise SystemExit
 
@@ -111,3 +109,26 @@ class Swarm():
 
         for process in self.processes:
             process.close()
+
+
+    def mode_restart(self, interrupted_processes):
+        print(f"\nEntering mode_restart. Processes: {interrupted_processes}")
+        for process in interrupted_processes:
+            print(f"Node {process.name} exited. Tring to restart it")
+
+            for nodes_list in self.local_nodes:
+                if process.name in nodes_list['names']:
+                    name = process.name
+                    process_index = self.processes.index(process)
+                    self.processes[process_index] = Process(name=name, target=run_node, daemon=True, 
+                        args=(name, nodes_list['function'], self.pipes[name], True))
+                    process = self.processes[process_index]
+                    sleep(3)
+                    process.start()
+                    sleep(2)
+                    break # Against the case of double entry of this name in config
+
+            if process.is_alive():
+                print(f"Node {process.name} restarted : {process}")
+
+        print("\tLeaving mode_restart")

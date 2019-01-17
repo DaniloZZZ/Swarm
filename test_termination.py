@@ -9,11 +9,14 @@ def everlong_fn(node):
 def dummy_fn(node):
     return
 
+def suicide_fn(node):
+    exit(-2)
+
 def main():
     swr = Swarm(local_nodes=[
         {
             'names' : ['server'], 
-            'function' : everlong_fn,
+            'function' : dummy_fn,
         },
         {
             'names' : ['everlong'], 
@@ -24,16 +27,15 @@ def main():
             'function' : everlong_fn,
         },
         {
-            'names' : ['everlong3'], 
-            'function' : dummy_fn,
+            'names' : ['suicide'], 
+            'function' : suicide_fn,
         },
 
     ])
-    
     import os
     print("Main process pid %d" % os.getpid())
     swr.start()
-    swr.monitor('terminate')
+    swr.monitor('restart')
 
 if __name__=="__main__":
     main()
