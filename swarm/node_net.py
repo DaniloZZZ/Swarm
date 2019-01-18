@@ -45,11 +45,11 @@ class Node:
                 msg = protocol.form_data_message(data)
                 utils.send_to(msg, (node['host'], node['port']) )
 
-        def recv(s):
-                msg_bytes = s.server_pipe.recv()
-                #TODO: do not receive all data if mailformed message
-                # now we send oly strings
-                return protocol.get_message_data(msg_bytes)
+        def recv(s,sender=None):
+            msg_bytes = s.server_pipe.recv(sender = sender)
+            #TODO: do not receive all data if mailformed message
+            # now we send oly strings
+            return protocol.get_message_data(msg_bytes)
 
         def _handshake(s, network):
             """
