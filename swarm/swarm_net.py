@@ -1,5 +1,5 @@
 from multiprocessing import Pipe, Process
-from network.node import Node
+from node_net import Node
 
 
 class SwarmNetwork():

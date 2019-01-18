@@ -21,7 +21,7 @@ def func(node):
         for i in range(10):
             msg = node.recv()
             _print(node,i,'got',msg)
-            time.sleep(0.1)
+            time.sleep(0.03)
             node.send('B',msg+', a')
 
     elif node.name=='B':
